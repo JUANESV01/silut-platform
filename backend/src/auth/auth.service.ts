@@ -537,6 +537,13 @@ export class AuthService {
       roles.includes(RoleName.ADMINISTRADOR) ||
       roles.includes(RoleName.ADMINISTRATIVO);
 
+    const nombreDesdeCorreo = usuario.correo
+      .split('@')[0]
+      .split(/[._-]+/)
+      .filter(Boolean)
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(' ');
+
     return {
       id: usuario.id,
       correo: usuario.correo,
@@ -550,7 +557,7 @@ export class AuthService {
         ? `${estudiante.nombres} ${estudiante.apellidos}`
         : educador
           ? `${educador.nombres} ${educador.apellidos}`
-          : usuario.correo.split('@')[0],
+          : nombreDesdeCorreo,
       estudianteId: estudiante?.id || null,
       educadorId: educador?.id || null,
     };

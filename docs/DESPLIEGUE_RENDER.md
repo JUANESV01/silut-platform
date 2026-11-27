@@ -46,6 +46,23 @@ Esta guía explica paso a paso cómo publicar **SILUT** completo (Base de datos 
 
 ---
 
+## Opción alternativa recomendada para BD: PostgreSQL en Neon (sin vencimiento de 30 días + múltiples bases/ramas)
+
+En el plan gratuito de Render la base de datos PostgreSQL caduca a los 30 días. Si prefieres **Neon** (`neon.tech`, PostgreSQL 16 gratuito permanente y con soporte para múltiples bases de datos o ramas `staging` y `producción` en el mismo proyecto):
+
+1. Crea un proyecto gratuito en [https://console.neon.tech](https://console.neon.tech) (por ejemplo `silut-lucytejada`).
+2. Puedes crear varias bases de datos o ramas (ej. `silut_prod` y `silut_staging`) dentro del mismo proyecto Neon sin costo.
+3. Copia la cadena de conexión **Pooled connection string** de Neon:
+   ```text
+   postgresql://neondb_owner:TU_CLAVE@ep-xxxx-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require
+   ```
+4. En **Render** → servicio `silut-lucytejada-api` → **Environment**:
+   - Reemplaza `DATABASE_URL` por la cadena de Neon.
+   - Verifica que `DB_SSL=true`, `DB_SYNCHRONIZE=true` y `AUTO_SEED=true` estén activos.
+5. Guarda y reinicia el servicio: SILUT creará automáticamente las 16 tablas y sembrará los datos iniciales y las cuentas de **Juan, Miguel y Nicolás** (con cambio obligatorio de clave).
+
+---
+
 ## Notas importantes para el plan gratuito de Render
 
 - **Arranque en frío (cold start)**: los Web Services del plan gratuito de Render se suspenden tras 15 minutos de inactividad y tardan ~30 segundos en despertar en la primera petición. **Tip para la sustentación**: abre la URL 2 minutos antes de presentar ante el docente.

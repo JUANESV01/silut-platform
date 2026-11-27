@@ -57,8 +57,54 @@ export class SeedService implements OnApplicationBootstrap {
     if (autoSeed === 'false') return;
     try {
       await this.seedIfEmpty();
+      await this.ensureTeamAccounts();
     } catch (err) {
       this.logger.warn(`Auto-seed omitido: ${(err as Error).message}`);
+    }
+  }
+
+  /**
+   * Garantiza las cuentas predeterminadas del equipo (Juan, Miguel y Nicolás)
+   * con clave genérica temporal ("Silut2026*") y cambio obligatorio en primer ingreso (EST-03).
+   */
+  async ensureTeamAccounts() {
+    const rolAdmin = await this.rolRepo.findOne({
+      where: { nombre: RoleName.ADMINISTRADOR },
+    });
+    const rolCoord = await this.rolRepo.findOne({
+      where: { nombre: RoleName.ADMINISTRATIVO },
+    });
+    if (!rolAdmin || !rolCoord) return;
+
+    const cuentasEquipo = [
+      'juan.villegas@lucytejada.pereira.gov.co',
+      'miguel.florian@lucytejada.pereira.gov.co',
+      'nicolas.botero@lucytejada.pereira.gov.co',
+    ];
+
+    const hashGenerica = await bcrypt.hash('Silut2026*', 10);
+    let creadas = 0;
+
+    for (const correo of cuentasEquipo) {
+      const existe = await this.usuarioRepo.findOne({ where: { correo } });
+      if (!existe) {
+        await this.usuarioRepo.save(
+          this.usuarioRepo.create({
+            correo,
+            hashClave: hashGenerica,
+            debeCambiarClave: true, // Obliga a cambiar contraseña al iniciar sesión
+            activo: true,
+            roles: [rolAdmin, rolCoord],
+          }),
+        );
+        creadas++;
+      }
+    }
+
+    if (creadas > 0) {
+      this.logger.log(
+        `Cuentas del equipo creadas (${creadas}) con cambio obligatorio de contraseña en primer ingreso.`,
+      );
     }
   }
 

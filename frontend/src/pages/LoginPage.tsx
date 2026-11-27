@@ -6,8 +6,10 @@ import { extractErrorMessage } from '../api/client';
 import { SilutLogo } from '../components/ui/SilutLogo';
 
 const CUENTAS_DEMO = [
-  { rol: 'Administrador', correo: 'admin@lucytejada.pereira.gov.co', clave: 'Admin2026*' },
-  { rol: 'Administrativo', correo: 'coordinacion@lucytejada.pereira.gov.co', clave: 'Coord2026*' },
+  { rol: 'Juan Villegas (Admin · Cambio clave)', correo: 'juan.villegas@lucytejada.pereira.gov.co', clave: 'Silut2026*' },
+  { rol: 'Miguel Florián (Admin · Cambio clave)', correo: 'miguel.florian@lucytejada.pereira.gov.co', clave: 'Silut2026*' },
+  { rol: 'Nicolás Botero (Admin · Cambio clave)', correo: 'nicolas.botero@lucytejada.pereira.gov.co', clave: 'Silut2026*' },
+  { rol: 'Administrativo / Dirección', correo: 'coordinacion@lucytejada.pereira.gov.co', clave: 'Coord2026*' },
   { rol: 'Educador (Danza)', correo: 'educador@lucytejada.pereira.gov.co', clave: 'Educador2026*' },
   { rol: 'Estudiante', correo: 'estudiante@lucytejada.pereira.gov.co', clave: 'Estudiante2026*' },
 ];

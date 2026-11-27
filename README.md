@@ -62,12 +62,15 @@ silut/
 
 Al iniciar el backend con `AUTO_SEED=true` sobre una base de datos vacía, se cargan automáticamente los **7 programas oficiales** del Centro Cultural Lucy Tejada, 7 salones, 7 educadores, 35 estudiantes distribuidos por barrios/comunas de Pereira (incluyendo menores con acudientes), 11 grupos (2026-2 y 2026-1), sesiones de asistencia y evaluaciones cualitativas:
 
-| Rol | Correo | Contraseña |
-|---|---|---|
-| **Administrador del Sistema** | `admin@lucytejada.pereira.gov.co` | `Admin2026*` |
-| **Personal Administrativo / Dirección** | `coordinacion@lucytejada.pereira.gov.co` | `Coord2026*` |
-| **Educador (Danza)** | `educador@lucytejada.pereira.gov.co` | `Educador2026*` |
-| **Estudiante** | `estudiante@lucytejada.pereira.gov.co` | `Estudiante2026*` |
+| Rol | Correo | Contraseña inicial | Primer acceso |
+|---|---|---|---|
+| **Juan Villegas (Admin + Administrativo)** | `juan.villegas@lucytejada.pereira.gov.co` | `Silut2026*` | Cambio obligatorio |
+| **Miguel Florián (Admin + Administrativo)** | `miguel.florian@lucytejada.pereira.gov.co` | `Silut2026*` | Cambio obligatorio |
+| **Nicolás Botero (Admin + Administrativo)** | `nicolas.botero@lucytejada.pereira.gov.co` | `Silut2026*` | Cambio obligatorio |
+| **Administrador General** | `admin@lucytejada.pereira.gov.co` | `Admin2026*` | Directo |
+| **Personal Administrativo / Dirección** | `coordinacion@lucytejada.pereira.gov.co` | `Coord2026*` | Directo |
+| **Educador (Danza)** | `educador@lucytejada.pereira.gov.co` | `Educador2026*` | Directo |
+| **Estudiante** | `estudiante@lucytejada.pereira.gov.co` | `Estudiante2026*` | Directo |
 
 ---
 
