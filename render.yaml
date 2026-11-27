@@ -1,16 +1,9 @@
 # Render Blueprint — SILUT (Sistema de Información Lucy Tejada)
 # Centro Cultural Lucy Tejada - Pereira, Colombia
-# Despliegue automatizado: PostgreSQL + API NestJS + Frontend SPA React
-
-databases:
-  - name: silut-lucytejada-db
-    databaseName: silut_lucytejada
-    user: silut_user
-    plan: free
-    region: oregon
+# Despliegue automatizado: API NestJS + Frontend SPA React conectados a Neon PostgreSQL
 
 services:
-  # API Backend + Worker integrado (NestJS + TypeORM + PostgreSQL + Caché/Cola)
+  # API Backend + Worker integrado (NestJS + TypeORM + Neon PostgreSQL + Caché/Cola)
   - type: web
     name: silut-lucytejada-api
     runtime: node
@@ -26,9 +19,7 @@ services:
       - key: PORT
         value: "10000"
       - key: DATABASE_URL
-        fromDatabase:
-          name: silut-lucytejada-db
-          property: connectionString
+        sync: false
       - key: DB_SSL
         value: "true"
       - key: DB_SYNCHRONIZE
@@ -46,7 +37,7 @@ services:
       - key: DESERTION_ABSENCE_THRESHOLD
         value: "3"
       - key: CORS_ORIGIN
-        sync: false
+        value: "*"
 
   # Frontend SPA (React + TypeScript + Tailwind CSS)
   - type: web
