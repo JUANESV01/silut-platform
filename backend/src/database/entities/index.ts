@@ -1,0 +1,15 @@
+export { Rol } from './rol.entity';
+export { Usuario } from './usuario.entity';
+export { Salon } from './salon.entity';
+export { Programa } from './programa.entity';
+export { IndicadorEvaluacion } from './indicador-evaluacion.entity';
+export { Educador } from './educador.entity';
+export { Estudiante } from './estudiante.entity';
+export { Grupo } from './grupo.entity';
+export { Horario } from './horario.entity';
+export { Inscripcion } from './inscripcion.entity';
+export { Sesion } from './sesion.entity';
+export { Asistencia } from './asistencia.entity';
+export { Evaluacion } from './evaluacion.entity';
+export { Notificacion } from './notificacion.entity';
+export { Auditoria } from './auditoria.entity';

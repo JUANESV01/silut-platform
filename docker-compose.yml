@@ -1,0 +1,82 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: gea_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: lucytejada_gea
+      POSTGRES_USER: lucytejada
+      POSTGRES_PASSWORD: lucytejada_dev_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lucytejada -d lucytejada_gea"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: gea_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: gea_mailpit
+    restart: unless-stopped
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: gea_backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DATABASE_URL: postgres://lucytejada:lucytejada_dev_password@postgres:5432/lucytejada_gea
+      DB_SSL: "false"
+      DB_SYNCHRONIZE: "true"
+      AUTO_SEED: "true"
+      REDIS_URL: redis://redis:6379
+      SMTP_HOST: mailpit
+      SMTP_PORT: 1025
+      SMTP_FROM: "Centro Cultural Lucy Tejada <no-reply@lucytejada.pereira.gov.co>"
+      JWT_SECRET: dev_jwt_secret_change_in_production_lucy_tejada_2026
+      JWT_REFRESH_SECRET: dev_refresh_secret_change_in_production_lucy_tejada_2026
+      CORS_ORIGIN: http://localhost:5173,http://localhost:8080
+    ports:
+      - "3000:3000"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: http://localhost:3000
+    container_name: gea_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+
+volumes:
+  postgres_data:

@@ -1,0 +1,77 @@
+# Render Blueprint — SILUT (Sistema de Información Lucy Tejada)
+# Centro Cultural Lucy Tejada - Pereira, Colombia
+# Despliegue automatizado: PostgreSQL + API NestJS + Frontend SPA React
+
+databases:
+  - name: silut-lucytejada-db
+    databaseName: silut_lucytejada
+    user: silut_user
+    plan: free
+    region: oregon
+
+services:
+  # API Backend + Worker integrado (NestJS + TypeORM + PostgreSQL + Caché/Cola)
+  - type: web
+    name: silut-lucytejada-api
+    runtime: node
+    region: oregon
+    plan: free
+    rootDir: backend
+    buildCommand: npm install && npm run build
+    startCommand: npm run start:prod
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "10000"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: silut-lucytejada-db
+          property: connectionString
+      - key: DB_SSL
+        value: "true"
+      - key: DB_SYNCHRONIZE
+        value: "true"
+      - key: AUTO_SEED
+        value: "true"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 15m
+      - key: JWT_REFRESH_EXPIRES_IN
+        value: 7d
+      - key: DESERTION_ABSENCE_THRESHOLD
+        value: "3"
+      - key: CORS_ORIGIN
+        sync: false
+
+  # Frontend SPA (React + TypeScript + Tailwind CSS)
+  - type: web
+    name: silut-lucytejada-web
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: SAMEORIGIN
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: silut-lucytejada-api
+          envVarKey: RENDER_EXTERNAL_URL
